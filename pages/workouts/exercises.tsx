@@ -1,7 +1,7 @@
 import type { NextPage } from "next";
 import Link from "next/link";
 import { Table } from "react-bootstrap";
-import { workoutRoutines } from "../../features/workout/workoutData";
+import { workoutRoutines } from "../../src/features/workout/workoutData";
 
 const ExercisesIndexPage: NextPage = () => {
   const exerciseTableView = workoutRoutines.map((exercise, index) => {

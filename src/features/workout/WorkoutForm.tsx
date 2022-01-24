@@ -22,11 +22,12 @@ import {
   WorkingSet,
 } from "./model";
 
-import { useAppSelector, useAppDispatch } from "../../app/hooks";
+import { useAppDispatch } from "../../app/hooks";
 import { addWorkout, unselectWorkout } from "./workoutSlice";
 import { useRouter } from "next/router";
 import RoutineModalForm from "./RoutineModalForm";
 import ExerciseForm from "./ExerciseForm";
+import { addWorkoutByPost } from "./WorkoutService";
 
 interface WorkoutFormProps {
   workout?: Workout | null;
@@ -66,6 +67,7 @@ const WorkoutForm: FC<WorkoutFormProps> = (props) => {
       dispatch(unselectWorkout());
     }
     dispatch(addWorkout(newWorkout));
+    addWorkoutByPost(newWorkout);
     actions.setSubmitting(false);
     router.push("../workouts");
   };

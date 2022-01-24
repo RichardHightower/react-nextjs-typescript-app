@@ -57,12 +57,17 @@ export const LifterSchema = yup.object().shape({
 });
 
 export interface Workout {
+    id?: null|string, 
     name: string,
     description?: string,
     defaultUnits: Units,
     workoutType: WorkoutType,
     exercises: Exercise[],
     time: string
+}
+
+export interface WorkoutsResult {
+    [key:string]:Workout
 }
 
 export const WorkoutSchema = yup.object().shape({

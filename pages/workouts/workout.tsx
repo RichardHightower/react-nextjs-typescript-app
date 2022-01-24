@@ -1,9 +1,9 @@
 import type { NextPage } from 'next'
-import ExerciseForm from '../../features/workout/ExerciseForm'
-import WorkoutForm from '../../features/workout/WorkoutForm'
+import ExerciseForm from '../../src/features/workout/ExerciseForm'
+import WorkoutForm from '../../src/features/workout/WorkoutForm'
 
-import { useAppSelector } from "../../app/hooks";
-import { selectCurrentWorkout } from "../../features/workout/workoutSlice";
+import { useAppSelector } from "../../src/app/hooks";
+import { selectCurrentWorkout } from "../../src/features/workout/workoutSlice";
 
 const Workout: NextPage = () => {
   const workout = useAppSelector(selectCurrentWorkout);

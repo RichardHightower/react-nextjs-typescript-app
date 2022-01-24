@@ -1,17 +1,52 @@
 import type { NextPage } from "next";
 import Link from "next/link";
 import { Table, Card, Stack } from "react-bootstrap";
+import {config} from "../../config"
 
-import {  selectWorkouts, setSelectedWorkout} from "../../features/workout/workoutSlice";
-import { Exercise, WorkingSet, Workout } from "../../features/workout/model";
-import { useState } from "react";
-import { useAppSelector, useAppDispatch } from "../../app/hooks";
+import {  selectWorkouts, setSelectedWorkout} from "../../src/features/workout/workoutSlice";
+import { Exercise, WorkingSet, Workout, WorkoutsResult } from "../../src/features/workout/model";
+import { useState, useEffect } from "react";
+
 import { useRouter } from "next/router";
+import { useAppDispatch } from "../../src/app/hooks";
 
 const WorkoutIndex: NextPage = () => {
   const dispatch = useAppDispatch();
   const router = useRouter();
-  const workouts = useAppSelector(selectWorkouts);
+  // const workouts = useAppSelector(selectWorkouts);
+  const [isLoading, setIsLoading] = useState(true);
+  const [workouts, setWorkouts] = useState<Array<Workout>>([]);
+
+
+  useEffect( () => { 
+    setIsLoading(true);
+    fetch(
+      `${config.dbURL}`,
+    ).then((response:Response) =>  {
+       return response.json();
+    })
+    .then((data)=> {
+
+      console.log("data", data, JSON.stringify(data));
+      const workoutResult = data as unknown as WorkoutsResult;
+      const newWorkouts : Array<Workout> = [];
+      for (const key in data) {
+
+          const sentWorkout = workoutResult[key] as Workout;
+          const workout : Workout = {
+            id:key,
+            ...sentWorkout
+          };
+          newWorkouts.push(workout);
+      }
+
+      console.log("newWorkouts", newWorkouts, JSON.stringify(newWorkouts));
+      setWorkouts(newWorkouts);
+      setIsLoading(false);
+    }
+    );
+  }, []);
+
 
   function workoutSelected(workout: Workout) {
     dispatch(setSelectedWorkout(workout));
@@ -81,17 +116,30 @@ const WorkoutIndex: NextPage = () => {
     </Card>);
   });
 
+  if (isLoading) {
+    return (
+      <>
+            <h1>Workouts</h1>
+            <Stack gap={3} direction="horizontal">
+              <Link href="/workouts/workout">Add Workout</Link>
+              <Link href="/workouts/exercises">Exercises</Link>
+            </Stack>
+            Loading...
+      </>
+    );
+  } else {
   return (
-    <>
-      <h1>Workouts</h1>
+        <>
+          <h1>Workouts</h1>
 
-      <Stack gap={3} direction="horizontal">
-        <Link href="/workouts/workout">Add Workout</Link>
-        <Link href="/workouts/exercises">Exercises</Link>
-      </Stack>
-      {workoutsView}
-    </>
-  );
+          <Stack gap={3} direction="horizontal">
+            <Link href="/workouts/workout">Add Workout</Link>
+            <Link href="/workouts/exercises">Exercises</Link>
+          </Stack>
+          {workoutsView}
+        </>
+      );
+  }
 };
 
 export default WorkoutIndex;

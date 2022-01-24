@@ -33,5 +33,10 @@ yarn-error.log*
 # vercel
 .vercel
 
+config.ts
+
 # typescript
 *.tsbuildinfo
+
+# pwd stuff we don't want in git 
+.env.local
