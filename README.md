@@ -542,3 +542,12 @@ npm install formik --save
 ```
 
 
+## Add support for firebase
+
+#### Add config.ts file to your project 
+
+```
+  export const config = {
+    dbURL: "https://YOUR_URL_FOR_FIREBASE.firebaseio.com/workout.json"
+  };
+```
